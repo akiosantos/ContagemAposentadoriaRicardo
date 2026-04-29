@@ -2,74 +2,141 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contagem Regressiva</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #4facfe, #00f2fe);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
       color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* 🔥 NOVO TÍTULO FORA DO CARD */
+    .main-title {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      animation: fadeSlide 1.5s ease;
     }
 
     .container {
-      text-align: center;
       background: rgba(0,0,0,0.3);
-      padding: 30px;
+      padding: 25px;
       border-radius: 15px;
+      width: 100%;
+      max-width: 500px;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #fff, #ffd700, #fff);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 3s linear infinite;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      margin-bottom: 20px;
     }
 
     .countdown {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
     }
 
     .time-box {
       background: rgba(255,255,255,0.2);
-      padding: 15px;
+      padding: 15px 10px;
       border-radius: 10px;
-      width: 90px;
+      backdrop-filter: blur(5px);
     }
 
     .time {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: bold;
+      animation: pulse 1s infinite alternate;
     }
 
     .label {
       font-size: 12px;
     }
+
+    /* 📱 Mobile */
+    @media (max-width: 400px) {
+      .countdown {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .main-title {
+        font-size: 24px;
+      }
+
+      .title {
+        font-size: 20px;
+      }
+    }
+
+    /* 🎬 Animações */
+    @keyframes shine {
+      to { background-position: 200% center; }
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>Contagem Regressiva</h1>
-  <div class="countdown">
-    <div class="time-box"><div id="years" class="time">0</div><div class="label">Anos</div></div>
-    <div class="time-box"><div id="months" class="time">0</div><div class="label">Meses</div></div>
-    <div class="time-box"><div id="days" class="time">0</div><div class="label">Dias</div></div>
-    <div class="time-box"><div id="hours" class="time">0</div><div class="label">Horas</div></div>
-    <div class="time-box"><div id="minutes" class="time">0</div><div class="label">Minutos</div></div>
-    <div class="time-box"><div id="seconds" class="time">0</div><div class="label">Segundos</div></div>
+  <!-- 🔥 NOVO TÍTULO -->
+  <div class="main-title">✨ O dia mais esperado ✨</div>
+
+  <div class="container">
+    <div class="title">🎉 Aposentadoria do Ricardo 🎉</div>
+    <div class="subtitle">Contagem Regressiva</div>
+
+    <div class="countdown">
+      <div class="time-box"><div id="years" class="time">0</div><div class="label">Anos</div></div>
+      <div class="time-box"><div id="months" class="time">0</div><div class="label">Meses</div></div>
+      <div class="time-box"><div id="days" class="time">0</div><div class="label">Dias</div></div>
+      <div class="time-box"><div id="hours" class="time">0</div><div class="label">Horas</div></div>
+      <div class="time-box"><div id="minutes" class="time">0</div><div class="label">Minutos</div></div>
+      <div class="time-box"><div id="seconds" class="time">0</div><div class="label">Segundos</div></div>
+    </div>
   </div>
-</div>
 
 <script>
-  // 🔥 DEFINA A DATA AQUI
   const targetDate = new Date("2029-06-09T00:00:00");
 
   function getTimeRemaining() {
     const now = new Date();
-
-    if (now >= targetDate) {
-      return null;
-    }
+    if (now >= targetDate) return null;
 
     let years = targetDate.getFullYear() - now.getFullYear();
     let months = targetDate.getMonth() - now.getMonth();
@@ -78,21 +145,9 @@
     let minutes = targetDate.getMinutes() - now.getMinutes();
     let seconds = targetDate.getSeconds() - now.getSeconds();
 
-    // Ajustes negativos (em cascata)
-    if (seconds < 0) {
-      seconds += 60;
-      minutes--;
-    }
-
-    if (minutes < 0) {
-      minutes += 60;
-      hours--;
-    }
-
-    if (hours < 0) {
-      hours += 24;
-      days--;
-    }
+    if (seconds < 0) { seconds += 60; minutes--; }
+    if (minutes < 0) { minutes += 60; hours--; }
+    if (hours < 0) { hours += 24; days--; }
 
     if (days < 0) {
       const lastMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
@@ -112,7 +167,8 @@
     const t = getTimeRemaining();
 
     if (!t) {
-      document.querySelector(".container").innerHTML = "<h1>Chegou o grande dia! 🎉</h1>";
+      document.querySelector(".container").innerHTML =
+        "<h1>🎉 Chegou a aposentadoria! 🎉</h1>";
       return;
     }
 
